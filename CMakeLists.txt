@@ -306,6 +306,18 @@ ENDIF(WITH_THREADS)
 # Recurse into subdirectories
 FOREACH(module ${DCMTK_MODULES})
   ADD_SUBDIRECTORY(${module})
+
+  # for each shared lib add proper soname information
+  IF(BUILD_SHARED_LIBS)
+    IF(${module} MATCHES config)
+	# Skip config module
+      ELSEIF(${module} MATCHES doxygen)
+	# Skip doxygen module
+      ELSE(${module} MATCHES config)
+        SET_TARGET_PROPERTIES(${module} PROPERTIES ${DCMTK_LIBRARY_PROPERTIES})
+      ENDIF(${module} MATCHES config)
+  ENDIF(BUILD_SHARED_LIBS)
+  
 ENDFOREACH(module)
 
 #-----------------------------------------------------------------------------
